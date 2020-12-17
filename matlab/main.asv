@@ -1,0 +1,26 @@
+clear all;
+close all;
+
+edges=readEdges('6.edges');
+trigs=readTrigs('6.trigs');
+
+n=7;
+B1=B1fromEdges(n, edges);
+B2=B2fromTrig(n, edges, trigs);
+w=getRandomWeights(edges);
+
+%simpleDrawB1(B1, w, 0, 0);
+thr=1e-8;
+L1=HodgeLW_fr(B1, B2, w, 0, 0);
+
+%w=[1.01 1.02 .99 0.98 1.08 1.05 0.95 0.25 1.1 0.99]';
+
+simpleDrawB1(B1, w, 0, 0);
+
+e = -rand(size(w));
+
+run(B1, B2,)
+
+figure
+plot(ts, track, 'linewidth', 4)
+
