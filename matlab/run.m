@@ -15,6 +15,7 @@ function [e, L1_E, ts, track, log] = run(B1, B2, w, eps, e, beta, h, k, thr, ver
                 dE = getDotE(B1, B2, w, e, eps, k, thr);
                 E1 = diag(e)+h*dE;
                 e = diag(E1);
+                e=e/norm(e,2);
                 if verbose
                     fprintf('h:  %s  |  time: %f ||   E_norm: %f  , dE-orth: %f ||   F=%f\n', ...
                             h, t_cur,round(scal(E1, E1), 3), round(scal(dE, E1), 3),track(end));
@@ -24,16 +25,16 @@ function [e, L1_E, ts, track, log] = run(B1, B2, w, eps, e, beta, h, k, thr, ver
                 else
                     break
                 end
-                if h<1e-10
-                    h=h0;
-                    break
-                end
             end
             L1_E = HodgeLW_fr(B1, B2, w, e, eps);
             if getFk_l2(L1_E, k) > track(end)
                 h = h/beta;
             else
                 h = h*beta;
+                break
+            end
+            if h<1e-10
+                h=h0;
                 break
             end
         end
