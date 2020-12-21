@@ -20,15 +20,17 @@ e_min=zeros(size(w));
 
 figure
 hold on
-for rep=1:7
+for rep=1:3
     e = -rand(size(w));
     h=1e-5;
     beta=2.0;
     k=1;
     eps=sqrt(w(8));
+    alpha=.15;
 
-    [e, L1_E, ts, track, log]=run(B1, B2, w, eps, e, beta, h, k, thr, 0, 0);
-    p1=loglog(ts, track, 'linewidth', 4);
+    %[e, L1_E, ts, track, log]=run(B1, B2, w, eps, e, beta, h, k, thr, 0, 0);
+    [e, L1_E, ts, track, log]=run_connected(B1, B2, w, eps, e, beta, h, k, thr, alpha, 0, 0);
+    p1=plot(ts, abs(track), 'linewidth', 4);
     p1.Color(4)=0.5;
     
     if track(end)<min
