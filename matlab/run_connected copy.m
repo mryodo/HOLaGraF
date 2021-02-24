@@ -1,19 +1,19 @@
-function [e, L1_E, ts, track, log] = run(B1, B2, w, eps, e, beta, h, k, thr, verbose, draw)
+function [e, L1_E, ts, track, log] = run_connected(B1, B2, w, eps, e, beta, h, k, thr, alpha, verbose, draw)
     e = e/norm(e, 2);
     L1_E = HodgeLW_fr(B1, B2, w, e, eps);
-    track = [getFk_l2(L1_E, k)];
+    L0=getL0(B1, w, e, eps);
+    track = [getFk_l2_connected(L1_E, k, L0, alpha)];
     t_cur = 0;
     log = [];
     ts = [0, ];
-    beta=2;
     h0=h;
-    for i=1:100
+    for i=1:10000
         e0 = e;
         while 1
             while 1
                 e = e0;
-                dE = getDotE(B1, B2, w, e, eps, k, thr);
-                E1 = diag(e)+h*dE;
+                dE = getDotE_connected(B1, B2, w, e, eps, k, thr, alpha);
+                E1 = diag(e)-h*dE;
                 e = diag(E1);
                 e = e/norm(e, 2);
                 if verbose
@@ -27,7 +27,8 @@ function [e, L1_E, ts, track, log] = run(B1, B2, w, eps, e, beta, h, k, thr, ver
                 end
             end
             L1_E = HodgeLW_fr(B1, B2, w, e, eps);
-            if getFk_l2(L1_E, k) > track(end)
+            L0=getL0(B1, w, e, eps);
+            if getFk_l2_connected(L1_E, k, L0, alpha) > track(end)
                 h = h/beta;
             else
                 h = h*beta;
@@ -39,9 +40,10 @@ function [e, L1_E, ts, track, log] = run(B1, B2, w, eps, e, beta, h, k, thr, ver
             end
         end
         L1_E = HodgeLW_fr(B1, B2, w, e, eps);
+        L0=getL0(B1, w, e, eps);
         log=[log, sort(eig(L1_E, 'vector'))];
-        track=[track, getFk_l2(L1_E, k)];
-        dE = getDotE(B1, B2, w, e, eps, k, thr);
+        track=[track, getFk_l2_connected(L1_E, k, L0, alpha)];
+        dE = getDotE_connected(B1, B2, w, e, eps, k, thr, alpha);
         t_cur =t_cur + h;
         ts=[ts t_cur];
     end
