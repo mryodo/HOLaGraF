@@ -9,6 +9,6 @@ function simpleDrawB1(B1, w, eps, e)
         'LineWidth', 8*G.Edges.Weight, ...
         'MarkerSize', 20, 'NodeColor', colors(5), ...
         'EdgeFontSize', 16, 'NodeFontSize', 16, 'NodeFontWeight', 'bold')
-     title('Graph with eps=', eps, 'fontsize', 20);
+    %title('Graph with eps=', eps, 'fontsize', 20);
 
 end

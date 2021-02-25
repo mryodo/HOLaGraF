@@ -68,8 +68,12 @@ for i=1:10000
         L1_E = HodgeLW_fr(B1, B2, w, e1, eps);
         L0=getL0(B1, w, e1, eps);
         newval=getFk_l2_con_new(L1_E, k, L0, alph, mu);
+        
+        %%% We can make it more efficient by computing directly the eigvs
+        %%% of the new L0 and L1, without building L0, L1 
+        
         if  (newval < track(end))      
-            fprintf("%d / step %f accepted\n", i, h);
+            fprintf("%d / step %d accepted\n", i, h);
             h=h*beta;
             h_log=[h_log h];
             h_desc=[h_desc 1];
@@ -77,7 +81,7 @@ for i=1:10000
             break
         else
             e=e0;
-            fprintf("%d / step %f rejected\n", i, h);
+            fprintf("%d / step %d rejected\n", i, h);
             h=h/beta;
             h_log=[h_log h];
             h_desc=[h_desc 2];
@@ -86,7 +90,7 @@ for i=1:10000
             e=e+ nu*getDotE_con_new_diag(B1, B2, w, e, 0, k, thr, alph, mu);
             e=e/norm(e, 2);
             h=h0;
-            fprintf("%d / step %f resetted\n", i, h);
+            fprintf("%d / step %d resetted ---\n", i, h);
             break
         end
         

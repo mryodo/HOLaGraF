@@ -1,4 +1,5 @@
 function res=getFk_l2_con_new(L1, k, L0, alph, mu)
+%%% We can improve efficiency here by computing only the eigevects we need
     d=eig(L1,'vector');
     d = sort(d);
     res=sum(power(d(1:k+1), 2));
