@@ -1,14 +1,11 @@
-function L0 = getL0(B1, w, e, eps)
-%     W=diag(sqrt(w)+eps*e);
-    degrees = sum(abs(B1)*diag(w+eps*e)); 
-    D12 = diag(1./sqrt(degrees));
-%     D12=diag(1./(sum(abs(B1)*W, 2)));
-    L0=D12*B1*W*W*B1'*D12;
+function L0 = getL0(G)
+    W=diag(sqrt(G.w)+G.eps0*G.e);
+    A = getAdjWB1(G.B1, W);
+    A = A+eye(size(A, 1));
+    d = A * ones(size(A, 1), 1);
+    L0=diag(d)-A;
+    L0=diag(d.^(-1/2))*L0*diag(d.^(-1/2));
+    %D12=sqrt(diag(1./(sum(abs(G.B1)*W*W, 2))));
+    %L0=D12*G.B1*W*W*G.B1'*D12;
+    %L0=G.B1*W*W*G.B1';
 end
-
-
-
-%%%%
-% A_{ij} = w(ij)
-% D_{ii} = sum_j A_{ij} = sum_j w(ij)
-% DD = 1./sqrt(D)

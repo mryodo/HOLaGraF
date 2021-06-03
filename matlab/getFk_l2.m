@@ -1,5 +1,6 @@
-function res=getFk_l2(L1, k)
-    d=eig(L1,'vector');
-    d = sort(d);
-    res=sqrt(sum(power(d(1:k+1), 2)));
+function res=getFk_l2(G, k, p, thrs, fileID)
+    
+    res=getFk1(G, k, p, thrs, fileID)+getFk2(G, k, p, thrs, fileID);
+    %+getFk3(G, k, p, thrs, fileID);
+
 end
